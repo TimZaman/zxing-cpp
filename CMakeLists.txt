@@ -53,13 +53,13 @@ endif()
 include_directories("./core/src/")
 add_library(libzxing ${LIBZXING_FILES})
 set_target_properties(libzxing PROPERTIES PREFIX "")
-find_package(Iconv)
-if(ICONV_FOUND)
-    include_directories(${ICONV_INCLUDE_DIR})
-    target_link_libraries(libzxing ${ICONV_LIBRARIES})
-else()
+#find_package(Iconv)
+#if(ICONV_FOUND)
+#    include_directories(${ICONV_INCLUDE_DIR})
+#    target_link_libraries(libzxing ${ICONV_LIBRARIES})
+#else()
     add_definitions(-DNO_ICONV=1)
-endif()
+#endif()
 
 # Add cli executable.
 file(GLOB_RECURSE ZXING_FILES
@@ -82,3 +82,19 @@ if(CPPUNIT_FOUND)
 else()
     message(WARNING "Not building testrunner, because CppUnit is missing")
 endif()
+
+
+#Install stuff [TZ]
+INSTALL(FILES _build/libzxing.a  DESTINATION /usr/local/lib/ )
+INSTALL(FILES _build/zxing       DESTINATION /usr/local/bin/ )
+INSTALL(DIRECTORY core/src/ DESTINATION /usr/local/include FILES_MATCHING PATTERN "*.h" )
+
+
+
+
+
+
+
+
+
+
