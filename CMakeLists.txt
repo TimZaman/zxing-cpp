@@ -51,8 +51,8 @@ if(WIN32)
     include_directories(SYSTEM "./core/lib/win32/")
 endif()
 include_directories("./core/src/")
-add_library(libzxing ${LIBZXING_FILES})
-set_target_properties(libzxing PROPERTIES PREFIX "")
+add_library(libzxing SHARED ${LIBZXING_FILES})
+set_target_properties(libzxing PROPERTIES PREFIX "" COMPILE_FLAGS " -fPIC")
 #find_package(Iconv)
 #if(ICONV_FOUND)
 #    include_directories(${ICONV_INCLUDE_DIR})
@@ -85,7 +85,7 @@ endif()
 
 
 #Install stuff [TZ]
-INSTALL(FILES _build/libzxing.a  DESTINATION /usr/local/lib/ )
+INSTALL(FILES _build/libzxing.so  DESTINATION /usr/local/lib/ )
 INSTALL(FILES _build/zxing       DESTINATION /usr/local/bin/ )
 INSTALL(DIRECTORY core/src/ DESTINATION /usr/local/include FILES_MATCHING PATTERN "*.h" )
 
