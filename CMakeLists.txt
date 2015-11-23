@@ -50,8 +50,18 @@ if(WIN32)
     set(LIBZXING_FILES ${LIBZXING_FILES} ${LIBZXING_WIN32_FILES})
     include_directories(SYSTEM "./core/lib/win32/")
 endif()
+
+if(APPLE)
+    if(POLICY CMP0043)
+       cmake_policy(SET CMP0043 OLD)
+    endif()
+endif()
+
+
 include_directories("./core/src/")
-add_library(libzxing ${LIBZXING_FILES})
+add_library(libzxing SHARED ${LIBZXING_FILES})
+set_target_properties(libzxing PROPERTIES PREFIX "" COMPILE_FLAGS " -fPIC")
+
 set_target_properties(libzxing PROPERTIES PREFIX "")
 find_package(Iconv)
 if(ICONV_FOUND)
