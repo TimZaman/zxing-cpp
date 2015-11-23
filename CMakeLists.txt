@@ -51,15 +51,15 @@ if(WIN32)
     include_directories(SYSTEM "./core/lib/win32/")
 endif()
 include_directories("./core/src/")
-add_library(libzxing SHARED ${LIBZXING_FILES})
-set_target_properties(libzxing PROPERTIES PREFIX "" COMPILE_FLAGS " -fPIC")
-#find_package(Iconv)
-#if(ICONV_FOUND)
-#    include_directories(${ICONV_INCLUDE_DIR})
-#    target_link_libraries(libzxing ${ICONV_LIBRARIES})
-#else()
+add_library(libzxing ${LIBZXING_FILES})
+set_target_properties(libzxing PROPERTIES PREFIX "")
+find_package(Iconv)
+if(ICONV_FOUND)
+    include_directories(${ICONV_INCLUDE_DIR})
+    target_link_libraries(libzxing ${ICONV_LIBRARIES})
+else()
     add_definitions(-DNO_ICONV=1)
-#endif()
+endif()
 
 # Add cli executable.
 file(GLOB_RECURSE ZXING_FILES
@@ -68,6 +68,11 @@ file(GLOB_RECURSE ZXING_FILES
 )
 add_executable(zxing ${ZXING_FILES})
 target_link_libraries(zxing libzxing)
+install(TARGETS zxing libzxing
+	LIBRARY DESTINATION lib
+	RUNTIME DESTINATION bin
+	ARCHIVE DESTINATION lib)
+install(DIRECTORY core/src/zxing/ DESTINATION include/zxing FILES_MATCHING PATTERN "*.h")
 
 # Add testrunner executable.
 find_package(CPPUNIT)
@@ -82,19 +87,3 @@ if(CPPUNIT_FOUND)
 else()
     message(WARNING "Not building testrunner, because CppUnit is missing")
 endif()
-
-
-#Install stuff [TZ]
-INSTALL(FILES _build/libzxing.so  DESTINATION /usr/local/lib/ )
-INSTALL(FILES _build/zxing       DESTINATION /usr/local/bin/ )
-INSTALL(DIRECTORY core/src/ DESTINATION /usr/local/include FILES_MATCHING PATTERN "*.h" )
-
-
-
-
-
-
-
-
-
-
